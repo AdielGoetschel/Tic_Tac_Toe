@@ -126,3 +126,25 @@ class Game:
                 return cell_number
             else:
                 cells_attempted.add(cell_number)
+
+    def play(self) -> None:
+        """Start the game, moves between the human player and the computer player until either player wins
+        or the game ends in a draw after 9 moves"""
+        number_of_moves_played = 0
+        current_player = self.human_player
+        while number_of_moves_played < 9:
+            if current_player == self.human_player:
+                cell = self.human_move()
+            else:
+                cell = self.computer_move()
+            self.board.update_cell(cell, current_player.mark)
+            number_of_moves_played += 1
+            if self.check_if_winner(current_player, self.board.board):
+                stream_output(f"{MARKS_MAPPING[current_player.mark]} wins!")
+                self.board.print_board()
+                return
+            if current_player == self.human_player:
+                current_player = self.computer_player
+            else:
+                current_player = self.human_player
+        stream_output(TIE_MESSAGE)
